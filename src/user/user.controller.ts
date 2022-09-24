@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -38,7 +39,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @ApiTags("Users")
@@ -48,7 +49,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Patch('/update')
-  update(/*@LoggedUser()*/ user: User, @Body() updateUserDto: UpdateUserDto) {
+  update(@LoggedUser() user: User, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(user, updateUserDto);
   }
 
@@ -60,7 +61,7 @@ export class UserController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/delete')
-  delete(/*@LoggedUser()*/ user: User) {
+  delete(@LoggedUser() user: User) {
     return this.userService.delete(user);
   }
 }

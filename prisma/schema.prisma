@@ -17,23 +17,23 @@ model User {
 
   transactions Transaction[]
 
-  category   Category @relation(fields: [categoryID], references: [id])
-  categoryID String
+  // category   Category @relation(fields: [categoryID], references: [id])
+  // categoryID String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
-model Category {
-  id          String @id @default(uuid())
-  Title       String @unique
-  Description String
+// model Category {
+//   id          String @id @default(uuid())
+//   Title       String @unique
+//   Description String
 
-  user User[]
+//   user User[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-}
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+// }
 
 model Transaction {
   id String @id @default(uuid())
