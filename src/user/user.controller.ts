@@ -2,33 +2,54 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @ApiTags("Auth")
+  @ApiOperation({
+    summary: 'cadastrar usuário',
+  })
+  @Post('/create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @ApiTags("Users")
+  @ApiOperation({
+    summary: 'Buscar todos os usuários',
+  })
+  @Get('/all')
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @ApiTags("Users")
+  @ApiOperation({
+    summary: 'Buscar usuário pelo ID',
+  })
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @ApiTags("Users")
+  @ApiOperation({
+    summary: 'Alterar perfil de usuário logado',
+  })
+  @Patch('/update')
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @ApiTags("Users")
+  @ApiOperation({
+    summary: 'Exclui conta de usuário logado',
+  })
+  @Delete('/delete')
+  remove() {
+    return this.userService.remove();
   }
 }
