@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -21,6 +23,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Buscar todos os usuários',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get('/all')
   findAll() {
     return this.userService.findAll();
@@ -30,6 +34,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Buscar usuário pelo ID',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
@@ -39,17 +45,22 @@ export class UserController {
   @ApiOperation({
     summary: 'Alterar perfil de usuário logado',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Patch('/update')
-  update(@Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(updateUserDto);
+  update(/*@LoggedUser()*/ user: User, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(user, updateUserDto);
   }
 
   @ApiTags("Users")
   @ApiOperation({
     summary: 'Exclui conta de usuário logado',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/delete')
-  remove() {
-    return this.userService.remove();
+  delete(/*@LoggedUser()*/ user: User) {
+    return this.userService.delete(user);
   }
 }
