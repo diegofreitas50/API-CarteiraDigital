@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,48 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  CPF_CNPJ String @unique
+  wallet   Float?
+
+  transactions Transaction[]
+
+  category   Category @relation(fields: [categoryID], references: [id])
+  categoryID String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Category {
+  id          String @id @default(uuid())
+  Title       String @unique
+  Description String
+
+  user User[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  payerID String
+
+  payee   User   @relation(fields: [payeeID], references: [id])
+  payeeID String
+
+  value Float
+
+  isReverse Boolean @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
