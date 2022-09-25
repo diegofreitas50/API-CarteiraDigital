@@ -14,20 +14,20 @@ model User {
   password String
   CPF_CNPJ String @unique
   wallet   Float?
+  logist   Boolean
 
   transactions Transaction[]
 
-  // category   Category @relation(fields: [categoryID], references: [id])
-  // categoryID String
+  // type   Type @relation(fields: [typeID], references: [id])
+  // typeID String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
-// model Category {
+// model Type {
 //   id          String @id @default(uuid())
 //   Title       String @unique
-//   Description String
 
 //   user User[]
 
