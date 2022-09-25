@@ -16,8 +16,8 @@ export class UserController {
     summary: 'cadastrar usuário',
   })
   @Post('/create')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  create(@Body() dto: CreateUserDto) {
+    return this.userService.create(dto);
   }
 
   @ApiTags("Users")
@@ -49,8 +49,8 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Patch('/update')
-  update(@LoggedUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(user, updateUserDto);
+  update(@LoggedUser() user: User, @Body() dto: UpdateUserDto) {
+    return this.userService.update(user, dto);
   }
 
   @ApiTags("Users")
