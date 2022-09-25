@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,7 +22,7 @@ import { LoggedUser } from 'src/auth/logged-user.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiTags("Auth")
+  @ApiTags('Auth')
   @ApiOperation({
     summary: 'cadastrar usuário',
   })
@@ -20,7 +31,7 @@ export class UserController {
     return this.userService.create(dto);
   }
 
-  @ApiTags("Users")
+  @ApiTags('Users')
   @ApiOperation({
     summary: 'Buscar todos os usuários',
   })
@@ -31,7 +42,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @ApiTags("Users")
+  @ApiTags('Users')
   @ApiOperation({
     summary: 'Buscar usuário pelo ID',
   })
@@ -42,7 +53,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @ApiTags("Users")
+  @ApiTags('Users')
   @ApiOperation({
     summary: 'Alterar perfil de usuário logado',
   })
@@ -53,7 +64,7 @@ export class UserController {
     return this.userService.update(user, dto);
   }
 
-  @ApiTags("Users")
+  @ApiTags('Users')
   @ApiOperation({
     summary: 'Exclui conta de usuário logado',
   })

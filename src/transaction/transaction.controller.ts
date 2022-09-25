@@ -1,13 +1,9 @@
-import {
-  Body, Controller,
-  Get, Param, Patch, Post, UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionService } from './transaction.service';
 
 @UseGuards(AuthGuard())
@@ -48,10 +44,7 @@ export class TransactionController {
     summary: 'Estornar transação por ID (logista)',
   })
   @Post('/reversal/:id')
-  update(
-    @LoggedUser() user:User,
-    @Param('id') id: string,
-  ) {
+  update(@LoggedUser() user: User, @Param('id') id: string) {
     return this.transactionService.update(user, id);
   }
 }

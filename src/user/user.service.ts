@@ -15,6 +15,7 @@ export class UserService {
     name: true,
     email: true,
     CPF_CNPJ: true,
+    wallet: true,
     createdAt: true,
     updatedAt: true,
   };

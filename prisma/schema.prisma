@@ -8,32 +8,19 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
-  email    String @unique
+  email    String  @unique
   password String
-  CPF_CNPJ String @unique
-  wallet   Float?
+  CPF_CNPJ String  @unique
+  wallet   Float?  @default(1000)
   logist   Boolean
 
   transactions Transaction[]
 
-  // type   Type @relation(fields: [typeID], references: [id])
-  // typeID String
-
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
-
-// model Type {
-//   id          String @id @default(uuid())
-//   Title       String @unique
-
-//   user User[]
-
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
-// }
 
 model Transaction {
   id String @id @default(uuid())
