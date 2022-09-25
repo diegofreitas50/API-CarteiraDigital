@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { handleError } from 'src/utils/handleError.util';
 
 @Injectable()
 export class UserService {
@@ -81,12 +82,12 @@ export class UserService {
           password: false,
         },
       })
-      .catch(/*handleError*/);
+      .catch(handleError);
   }
 
   async delete(user: User) {
     const id = user.id;
-    await this.prisma.user.delete({ where: { id } }).catch(/*handleError*/);
+    await this.prisma.user.delete({ where: { id } }).catch(handleError);
     throw new HttpException('Usuário deletado com sucesso!', 200);
   }
 }
