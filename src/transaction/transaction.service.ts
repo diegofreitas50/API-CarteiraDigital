@@ -64,6 +64,7 @@ export class TransactionService {
       .create({
         data,
         select: {
+          id: true,
           payerID: true,
           payee: {
             select: {
@@ -78,9 +79,10 @@ export class TransactionService {
   }
 
   async findAll(user: User) {
-    const allTransaction = await this.prisma.transaction.findMany({
-      where: { payeeID: user.id, payerID: user.id },
+    const allTransactionPayer = await this.prisma.transaction.findMany({
+      where: { payerID: user.id },
       select: {
+        id: true,
         payerID: true,
         payee: {
           select: {
@@ -92,11 +94,28 @@ export class TransactionService {
       },
     });
 
-    if (allTransaction.length === 0) {
+    const allTransactionPayee = await this.prisma.transaction.findMany({
+      where: { payeeID: user.id },
+      select: {
+        id: true,
+        payerID: true,
+        payee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        value: true,
+      },
+    });
+
+    if (allTransactionPayer.length === 0 && allTransactionPayee.length === 0) {
       throw new NotFoundException('Não há registros de transações');
     }
 
-    return allTransaction;
+    const allTransactions = [allTransactionPayee, allTransactionPayer]
+
+    return (allTransactions);
   }
 
   async findOne(user: User, id: string) {

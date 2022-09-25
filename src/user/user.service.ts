@@ -42,12 +42,8 @@ export class UserService {
       CPF_CNPJ: dto.CPF_CNPJ,
       email: dto.email,
       password: await bcrypt.hash(dto.password, 10),
+      wallet: 1000,
       logist: false,
-      // type: {
-      //   connect: {
-      //     Title: 'comum',
-      //   },
-      // },
     };
 
     if (cpfOrCnpj === 14) {
@@ -65,6 +61,7 @@ export class UserService {
   async findAll() {
     return await this.prisma.user.findMany({
       select: {
+        id: true,
         name: true,
         email: true,
         CPF_CNPJ: true,
