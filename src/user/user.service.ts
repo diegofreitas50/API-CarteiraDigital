@@ -9,11 +9,29 @@ import { handleError } from 'src/utils/handleError.util';
 
 @Injectable()
 export class UserService {
+  private userSelect = {
+    password: false,
+    id: true,
+    name: true,
+    email: true,
+    CPF_CNPJ: true,
+    createdAt: true,
+    updatedAt: true,
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
     if (dto.password != dto.confirmPassword) {
       throw new BadRequestException('As senhas informadas não são iguais.');
+    }
+
+    const cpfOrCnpj = dto.CPF_CNPJ.length;
+
+    if (cpfOrCnpj !== 14 && cpfOrCnpj !== 11) {
+      throw new BadRequestException(
+        'CPF deve conter 11 dídigos e CNPJ deve conter 14 dígitos',
+      );
     }
 
     delete dto.confirmPassword;
@@ -23,16 +41,24 @@ export class UserService {
       CPF_CNPJ: dto.CPF_CNPJ,
       email: dto.email,
       password: await bcrypt.hash(dto.password, 10),
+      logist: false,
+      // type: {
+      //   connect: {
+      //     Title: 'comum',
+      //   },
+      // },
     };
-    return this.prisma.user.create({
-      data,
-      select: {
-        name: true,
-        CPF_CNPJ: true,
-        email: true,
-        password: false,
-      },
-    });
+
+    if (cpfOrCnpj === 14) {
+      data.logist = true;
+      return this.prisma.user
+        .create({ data, select: this.userSelect })
+        .catch(handleError);
+    } else {
+      return this.prisma.user
+        .create({ data, select: this.userSelect })
+        .catch(handleError);
+    }
   }
 
   async findAll() {
